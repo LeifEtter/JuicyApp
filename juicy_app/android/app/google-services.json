@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "979105877667",
+    "project_id": "juicy-vintage",
+    "storage_bucket": "juicy-vintage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979105877667:android:178df64150d0f024bb3916",
+        "android_client_info": {
+          "package_name": "com.example.juicy_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "979105877667-hkgpnuqj44mfkqt3p7gufguj05ra94df.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFueaiDu6So7MPWd8UyHAoTlOni2sllh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979105877667-hkgpnuqj44mfkqt3p7gufguj05ra94df.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
