@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:juicy_app/extra/colors.dart';
 import 'package:juicy_app/screens/home_view_scroll.dart';
 import 'package:juicy_app/widgets/authentication_form.dart';
+import 'package:juicy_app/widgets/buttons.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   @override
@@ -95,11 +97,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> with Single
                       focusNode2: _focusNode2,
                       focusNode3: _focusNode3,
                     ),
-                    /*FormSubmit2(
-                      onPressed: authentication,
-                      submitText: isSignUp ? 'Registrieren' : 'Einloggen',
-                      buttonWidth: 300.0,
-                    ),*/
+                    SizedBox(height: 5.0),
+                    SubmitButton(
+                      buttonColor: juicyPurple,
+                      loggedIn: isSignUp,
+                      login: login,
+                      register: register,
+                    ),
                     SizedBox(height: 20.0),
                     Text(
                       isSignUp

@@ -3,11 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:juicy_app/widgets/buttons.dart';
 import 'package:juicy_app/widgets/top_bar.dart';
 import 'package:juicy_app/extra/categories.dart';
-import 'package:juicy_app/widgets/product_card.dart';
-import 'package:juicy_app/extra/products.dart';
+import 'package:juicy_app/widgets/product_card_redesign.dart';
 import 'package:juicy_app/screens/product_view.dart';
 import 'package:juicy_app/extra/routes.dart';
-import 'package:juicy_app/extra/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -20,9 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _showAppbar = true;
   bool isScrollingDown = false;
   bool _iconOpacity = true;
-  List activeCategories = [];
-  AnimationController _controller;
-
+  List activeCategories = ["sweater", "hoodie", "placeholder"];
 
   @override
   void initState() {
@@ -65,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             TopBar(
               showAppbar: _showAppbar,
               iconOpacity: _iconOpacity,
+              isSearching: false,
             ),
             Container(
               decoration: BoxDecoration(
@@ -88,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bool categoryActive = false;
                     if(activeCategories.contains(categorySwitches[index][0])) {
                       categoryActive = true;
+                      print("contains Category");
                     }
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -105,24 +104,35 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 10.0),
             Expanded(
-              child: GridView.builder(
-                controller: _scrollViewController,
-                shrinkWrap: true,
-                  itemCount: productList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(CustomPageRoute(ProductView(product: productList[index], screenHeight: MediaQuery.of(context).size.height, screenWidth: MediaQuery.of(context).size.width)));
-                        },
-                        child: ProductCard(
-                          product: productList[index],
-                        ),
-                      ),
-                    );
-                  }
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance.collection("products")
+                    .where("categories", arrayContainsAny: activeCategories)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if(snapshot.data == null) return CircularProgressIndicator();
+                  return GridView.builder(
+                    controller: _scrollViewController,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, childAspectRatio: 0.8,
+                    ),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot productItem = snapshot.data.documents[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(CustomPageRoute(ProductView(product: productItem, screenHeight: MediaQuery.of(context).size.height, screenWidth: MediaQuery.of(context).size.width)));
+                            },
+                            child: ProductCardRedesign(
+                              product: productItem,
+                            ),
+                          ),
+                        );
+                      }
+                  );
+                },
               ),
             ),
           ],

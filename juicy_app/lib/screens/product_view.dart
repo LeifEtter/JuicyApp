@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:juicy_app/widgets/text.dart';
+import 'package:juicy_app/extra/colors.dart';
 
 class ProductView extends StatefulWidget {
-  final List product;
+  final product;
   final double screenHeight;
   final double screenWidth;
 
@@ -46,18 +47,20 @@ class _ProductViewState extends State<ProductView> with SingleTickerProviderStat
   }
 
   @override
+
   Widget build(BuildContext context) {
+    List<String> categories = List.from(widget.product['categories']);
     return Scaffold(
       body: Stack(
         children: [
           Hero(
-            tag: widget.product[0] + '.container',
+            tag: widget.product["id"] + '.container',
             child: Container(
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(_edgeAnimation.value),
-                color: widget.product[2],
+                color: getColor(widget.product["color"]),
               ),
             ),
           ),
@@ -87,9 +90,9 @@ class _ProductViewState extends State<ProductView> with SingleTickerProviderStat
           Padding(
             padding: EdgeInsets.only(left: widget.screenWidth/2-100, top: widget.screenHeight/2-200),
             child: Hero(
-              tag: widget.product[0],
+              tag: widget.product["id"],
               child: Image.asset(
-                "assets/product_images/" + widget.product[0] + ".png",
+                widget.product["imagePath"],
                 width: 300,
               ),
             ),
@@ -108,10 +111,10 @@ class _ProductViewState extends State<ProductView> with SingleTickerProviderStat
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.product[1].length,
+                        itemCount: categories.length,
                         itemBuilder: (context, index) {
                           return WhiteText(
-                            widget.product[1][index] + ', ',
+                            categories[index] + ', ',
                             16.0,
                             FontWeight.w400,
                           );
@@ -120,7 +123,7 @@ class _ProductViewState extends State<ProductView> with SingleTickerProviderStat
                     ),
                   ],
                 ),
-                WhiteText(widget.product[5], 30.0, FontWeight.w500),
+                WhiteText(widget.product["name"], 30.0, FontWeight.w500),
 
               ],
             ),
@@ -132,7 +135,7 @@ class _ProductViewState extends State<ProductView> with SingleTickerProviderStat
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   WhiteText("Price", 20.0, FontWeight.w400),
-                  WhiteText(widget.product[4].toString() + "€", 40.0, FontWeight.w500),
+                  WhiteText(widget.product["price"].toString() + "€", 40.0, FontWeight.w500),
                 ],
               ),
             ),

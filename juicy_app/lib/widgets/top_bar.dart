@@ -5,10 +5,12 @@ import 'package:juicy_app/extra/colors.dart';
 class TopBar extends StatefulWidget {
   bool showAppbar = true;
   bool iconOpacity = true;
+  bool isSearching = false;
   TopBar({
     Key key,
     this.showAppbar,
-    this.iconOpacity
+    this.iconOpacity,
+    this.isSearching,
   }) : super(key: key);
   @override
   _TopBarState createState() => _TopBarState();
@@ -26,13 +28,35 @@ class _TopBarState extends State<TopBar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Opacity(
-              child: AppBarIcon(Icons.shopping_cart_outlined),
-              opacity: widget.iconOpacity ? 1.0 : 0.0,
+            Visibility(
+              visible: !widget.isSearching,
+              child: Opacity(
+                child: AppBarIcon(Icons.shopping_cart_outlined),
+                opacity: widget.iconOpacity ? 1.0 : 0.0,
+              ),
             ),
-            Image.asset("assets/logos/juicy_logo.png", fit: BoxFit.contain, width: 150),
+            Visibility(
+              visible: !widget.isSearching,
+                child: Image.asset(
+                    "assets/logos/juicy_logo.png",
+                    fit: BoxFit.contain,
+                    width: 150,
+                ),
+            ),
             Opacity(
-              child: AppBarIcon(Icons.search),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if(widget.isSearching == true) {
+                      widget.isSearching = false;
+                    } else if(widget.isSearching == false) {
+                      widget.isSearching = true;
+                    }
+
+                  });
+                },
+                  child: AppBarIcon(Icons.search)
+              ),
               opacity: widget.iconOpacity ? 1.0 : 0.0,
             ),
           ],

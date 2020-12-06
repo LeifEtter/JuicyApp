@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:juicy_app/extra/colors.dart';
 
 class AppBarIcon extends StatelessWidget {
   final IconData icon;
@@ -59,10 +60,54 @@ class CategoryButton extends StatelessWidget {
         height: 50,
         child: Icon(categoryIcon),
         decoration: BoxDecoration(
-          color: categoryActive ? Colors.grey : buttonColor,
+          color: categoryActive ? buttonColor : Colors.grey,
           borderRadius: BorderRadius.circular(15.0),
         ),
       ),
     );
   }
 }
+
+class SubmitButton extends StatelessWidget {
+  final Color buttonColor;
+  final bool loggedIn;
+  final Function login;
+  final Function register;
+  const SubmitButton({
+    Key key,
+    @required this.buttonColor,
+    @required this.loggedIn,
+    @required this.login,
+    @required this.register,
+  })  :  super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      height: 52,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: buttonColor,
+      ),
+
+      child: FlatButton(
+        onPressed: () {
+          loggedIn ? register() : login();
+        },
+        child: Text(
+          loggedIn ? "Registrieren" : "Anmelden",
+          style: TextStyle(
+            fontSize: 40.0,
+            color: juicyYellow,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
